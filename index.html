@@ -934,8 +934,10 @@ canvas {
                     <option value="medium" selected>Medium</option>
                     <option value="high">High</option>
                 </select>
-            </div>
-<a href="http://action_share">📤 Share Game</a>
+            </div><!-- Isko Settings Panel ke andar paste karo, purani Share line ki jagah -->
+<div id="settings-share-btn" style="margin-top: 15px; cursor: pointer; text-align: center; color: #ff00de; font-weight: bold;">
+    📤 Share Game
+</div>
 
 
             <div id="about-section">
@@ -3123,42 +3125,6 @@ let bonusTimeout;
             const texture = new THREE.CanvasTexture(canvas);
             return texture;
         }
-    </script>
-
-<script>
-(function () {
-  const shareText =
-    "🔥 NeonDrive X – Endless 3D Car Runner\n\n" +
-    "⚡ Super fast cyber racing game\n\n";
-
-  const shareUrl =
-    "https://play.google.com/store/apps/details?id=com.yourstudio.neondrivex";
-
-  function doShare() {
-    if (navigator.share) {
-      navigator.share({
-        title: "NeonDrive X",
-        text: shareText,
-        url: shareUrl
-      });
-    } else {
-      alert("Sharing not supported");
-    }
-  }
-
-  // 🔥 ACTION SHARE LISTENER
-  document.addEventListener("click", function (e) {
-    const link = e.target.closest("a");
-    if (!link) return;
-
-    if (link.getAttribute("href") === "http://action_share") {
-      e.preventDefault();
-      doShare();
-    }
-  });
-})();
-</script>
-<script>
     // 1. Share Button ko dhoondho
     // Hum ID aur Class dono try karenge taaki galti na ho
     var shareBtn = document.getElementById('share-button-home') || 
@@ -3220,6 +3186,35 @@ document.addEventListener('mousedown', function(event) {
         }
     }
 });
+    // --- UNIVERSAL SHARE HANDLER (Fix for Both Buttons) ---
+    
+    function triggerNativeShare() {
+        // Sound Effect
+        if(typeof soundSystem !== 'undefined') {
+            soundSystem.initAudioContext();
+            soundSystem.playButtonClickSound();
+        }
+
+        // Ye line AppCreator24 Native Share kholti hai
+        window.location.href = "http://action_share";
+    }
+
+    // 1. Settings Wale Button ka Logic
+    const settingShare = document.getElementById('settings-share-btn');
+    if (settingShare) {
+        settingShare.addEventListener('click', function() {
+            triggerNativeShare();
+        });
+    }
+
+    // 2. Home Wale Button ka Logic (Backup)
+    const homeShare = document.getElementById('share-button-home');
+    if (homeShare) {
+        homeShare.addEventListener('click', function() {
+            triggerNativeShare();
+        });
+    }
 </script>
+
 </body>
 </html>
