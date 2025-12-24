@@ -972,9 +972,13 @@ canvas {
                 <span>Games Played:</span>
                 <span class="record-value" id="games-played">0</span>
             </div>
-        </div>
-        <button id="play-button" class="home-button"><span>PLAY</span></button>
-        <button id="shop-button" class="home-button"><span>SHOP</span></button>
+
+<button id="play-button" class="home-button"><span>PLAY</span></button>
+
+<!-- 2. Shop aur Share (Ek line mein Agal-Bagal) -->
+<div class="button-row">
+    <button id="shop-button" class="home-button"><span>SHOP</span></button>
+    <button id="share-button-home" class="home-button"><span>SHARE</span></button>
     </div>
 
     <div id="shop-screen">
@@ -3130,45 +3134,92 @@ let bonusTimeout;
   const shareUrl =
     "https://play.google.com/store/apps/details?id=com.yourstudio.neondrivex";
 
-  // Share Function definition
-  function tryWebShare() {
+  function doShare() {
     if (navigator.share) {
       navigator.share({
         title: "NeonDrive X",
         text: shareText,
         url: shareUrl
-      }).catch(err => console.log("Share canceled"));
-      return true; // Batao ki Web Share support karta hai
+      });
+    } else {
+      alert("Sharing not supported");
     }
-    return false; // Web Share support nahi karta
   }
 
-  // Listener
+  // 🔥 ACTION SHARE LISTENER
   document.addEventListener("click", function (e) {
     const link = e.target.closest("a");
     if (!link) return;
 
-    // Sirf Share button ke liye check karo
     if (link.getAttribute("href") === "http://action_share") {
-      
-      // Agar browser (Chrome etc) native sharing support karta hai:
-      if (navigator.share) {
-        e.preventDefault(); // Link roko, JS use karo
-        tryWebShare();
-      } 
-      // Agar sharing support nahi hai (Jese AppCreator24 WebView mein):
-      else {
-        // e.preventDefault() MAT lagana.
-        // Link ko normal chalne do. 
-        // AppCreator24 jab dekhega ki URL "http://action_share" hai,
-        // wo khud mobile ka Share Menu khol dega.
-        console.log("Fallback to AppCreator24 Native Share");
-      }
+      e.preventDefault();
+      doShare();
     }
   });
 })();
 </script>
+<script>
+    // 1. Share Button ko dhoondho
+    // Hum ID aur Class dono try karenge taaki galti na ho
+    var shareBtn = document.getElementById('share-button-home') || 
+                   document.getElementById('shareBtn') ||
+                   document.querySelector("button:contains('SHARE')"); // Fallback
+
+    // Agar button mil gaya toh uspe click event lagao
+    if (shareBtn) {
+        shareBtn.addEventListener('click', function(e) {
+            
+            // Sound Effect (Agar game mein sound hai)
+            if(typeof soundSystem !== 'undefined') {
+                soundSystem.initAudioContext();
+                soundSystem.playButtonClickSound();
+            }
+
+            // --- MAIN JAADU YAHAN HAI ---
+            // Ye line AppCreator24 ko bolti hai: "Bhai Share Menu khol de!"
+            window.location.href = "http://action_share";
+            
+            // Note: Ye sirf APK mein kaam karega. 
+            // Chrome browser mein "Page not found" dikhayega, jo normal hai.
+        });
+    } else {
+        // Agar ID alag hai toh hum Text se dhoondne ki koshish karte hain
+        var allButtons = document.getElementsByTagName('button');
+        for (var i = 0; i < allButtons.length; i++) {
+            if (allButtons[i].innerText.includes("SHARE")) {
+                allButtons[i].addEventListener('click', function() {
+                    if(typeof soundSystem !== 'undefined') soundSystem.playButtonClickSound();
+                    window.location.href = "http://action_share";
+                });
+            }
+        }
+    }
 
 
+// --- CLICK OUTSIDE TO CLOSE SETTINGS ---
+// Ye code puri screen par click detect karega
+document.addEventListener('mousedown', function(event) {
+    
+    const settingsPanel = document.getElementById('settings-panel');
+    const settingsBtn = document.getElementById('settings-button');
+
+    // 1. Check karo ki Settings Panel khula hai ya nahi
+    if (settingsPanel.style.display === 'flex') {
+
+        // 2. Check karo ki click Settings Box ke ANDAR to nahi hua?
+        const isClickInsideBox = settingsPanel.contains(event.target);
+        
+        // 3. Check karo ki click Settings Button par to nahi hua? (Kyunki wo toggle karta hai)
+        const isClickOnButton = (event.target === settingsBtn);
+
+        // Agar click BOX ke BAHAR hua hai aur BUTTON par bhi nahi hua
+        if (!isClickInsideBox && !isClickOnButton) {
+            
+            // Toh Settings ko band kar do (toggleSettings function call karke)
+            toggleSettings();
+        }
+    }
+});
+</script>
 </body>
 </html>
