@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Lane Endless Run</title>
+    <title>NeonDrive X</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
@@ -759,6 +760,18 @@ canvas {
             50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
+#shareBtn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: linear-gradient(90deg, #00e5ff, #00b0ff);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+}
 
     </style>
 </head>
@@ -768,9 +781,9 @@ canvas {
     <div id="countdown-text">3</div>
 <div id="bonus-msg"><span class="bonus-subtext"></span></div>
     <div id="intro-screen">
-        <div id="main-title-text">Cyber Lane Endless 3D starting...</div>
+        <div id="main-title-text">NeonDrive X</div>
         <div id="loading-text">Loading...0%</div>
-        <div id="copyright-text">Powered by Ruzuka Studio pvt Ltd</div>
+        <div id="copyright-text">Powered by ❣️Santosh Mishra❣️</div>
     </div>
 
     <div id="ui-overlay">
@@ -922,10 +935,12 @@ canvas {
                     <option value="high">High</option>
                 </select>
             </div>
-            
+<a href="http://action_share">📤 Share Game</a>
+
+
             <div id="about-section">
-                <p>Cyber Lane Endless 3D Car race Free and enjoyable</p>
-                <p id="copyright-claim">Powered by Ruzuka Studio pvt Ltd</p>
+                <p>NeonDrive X</p>
+                <p id="copyright-claim">Powered by❣️Santosh Mishra❣️</p>
             </div>
         </div>
         
@@ -943,7 +958,7 @@ canvas {
     </div>
 
     <div id="home-screen">
-        <h1 id="home-title">Cyber Lane Endless 3D</h1>
+        <h1 id="home-title">NeonDrive X Endless 3D</h1>
         <div id="records-container">
             <div class="record-item">
                 <span>Total Coins:</span>
@@ -3105,5 +3120,40 @@ let bonusTimeout;
             return texture;
         }
     </script>
+
+<script>
+(function () {
+  const shareText =
+    "🔥 NeonDrive X – Endless 3D Car Runner\n\n" +
+    "⚡ Super fast cyber racing game\n\n";
+
+  const shareUrl =
+    "https://play.google.com/store/apps/details?id=com.yourstudio.neondrivex";
+
+  function doShare() {
+    if (navigator.share) {
+      navigator.share({
+        title: "NeonDrive X",
+        text: shareText,
+        url: shareUrl
+      });
+    } else {
+      alert("Sharing not supported");
+    }
+  }
+
+  // 🔥 ACTION SHARE LISTENER
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest("a");
+    if (!link) return;
+
+    if (link.getAttribute("href") === "http://action_share") {
+      e.preventDefault();
+      doShare();
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
