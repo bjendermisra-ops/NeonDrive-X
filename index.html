@@ -3130,30 +3130,45 @@ let bonusTimeout;
   const shareUrl =
     "https://play.google.com/store/apps/details?id=com.yourstudio.neondrivex";
 
-  function doShare() {
+  // Share Function definition
+  function tryWebShare() {
     if (navigator.share) {
       navigator.share({
         title: "NeonDrive X",
         text: shareText,
         url: shareUrl
-      });
-    } else {
-      alert("Sharing not supported");
+      }).catch(err => console.log("Share canceled"));
+      return true; // Batao ki Web Share support karta hai
     }
+    return false; // Web Share support nahi karta
   }
 
-  // 🔥 ACTION SHARE LISTENER
+  // Listener
   document.addEventListener("click", function (e) {
     const link = e.target.closest("a");
     if (!link) return;
 
+    // Sirf Share button ke liye check karo
     if (link.getAttribute("href") === "http://action_share") {
-      e.preventDefault();
-      doShare();
+      
+      // Agar browser (Chrome etc) native sharing support karta hai:
+      if (navigator.share) {
+        e.preventDefault(); // Link roko, JS use karo
+        tryWebShare();
+      } 
+      // Agar sharing support nahi hai (Jese AppCreator24 WebView mein):
+      else {
+        // e.preventDefault() MAT lagana.
+        // Link ko normal chalne do. 
+        // AppCreator24 jab dekhega ki URL "http://action_share" hai,
+        // wo khud mobile ka Share Menu khol dega.
+        console.log("Fallback to AppCreator24 Native Share");
+      }
     }
   });
 })();
 </script>
+
 
 </body>
 </html>
